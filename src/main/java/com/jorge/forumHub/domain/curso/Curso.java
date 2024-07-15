@@ -1,16 +1,14 @@
 package com.jorge.forumHub.domain.curso;
 
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 
-//@Table(name= "cursos")
-//@Entity(name = "Curso")
+@Table(name= "cursos")
+@Entity(name = "Curso")
 @Embeddable
 @Getter
 @Setter
@@ -18,9 +16,9 @@ import lombok.Setter;
 @AllArgsConstructor
 //@EqualsAndHashCode(of ="id")
 public class Curso {
-//    @Id
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-//    private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     private String nome;
 
     @Enumerated(EnumType.STRING)

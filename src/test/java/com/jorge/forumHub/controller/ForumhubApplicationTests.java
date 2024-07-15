@@ -1,10 +1,10 @@
-package com.jorge.forumHub;
+package com.jorge.forumHub.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class ForumHubApplicationTests {
+class ForumhubApplicationTests {
 
 	@Test
 	void contextLoads() {

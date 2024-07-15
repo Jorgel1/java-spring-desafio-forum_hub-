@@ -1,5 +1,7 @@
 package com.jorge.forumHub.domain.usuario;
 
-public record DadosAutenticacao(String login, String senha) {
+import com.fasterxml.jackson.annotation.JsonAlias;
+
+public record DadosAutenticacao(@JsonAlias({"email", "login"})String login, String senha) {
 }
 

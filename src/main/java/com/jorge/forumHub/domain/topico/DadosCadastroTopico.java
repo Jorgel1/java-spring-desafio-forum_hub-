@@ -10,9 +10,7 @@ public record DadosCadastroTopico(
         String titulo,
         @NotBlank(message = "Mensagem é obrigatório")
         String mensagem,
-        @NotBlank
-        String autor,
-        @NotNull
-        @Valid DadosCurso curso
+        @NotNull(message = "ID do curso deve ser informado para criar um tópico")
+        Long cursoId
 ) {
 }

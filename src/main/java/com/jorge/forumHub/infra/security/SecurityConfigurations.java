@@ -30,6 +30,7 @@ public class SecurityConfigurations {
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(req -> req
                         .requestMatchers(HttpMethod.POST, "/login").permitAll()
+                                .requestMatchers( "/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/topicos/*").hasRole("ADMIN")
 //                        .requestMatchers(HttpMethod.DELETE, "/pacientes/*").hasRole("ADMIN")
                         .anyRequest().authenticated()

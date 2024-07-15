@@ -1,5 +1,7 @@
 package com.jorge.forumHub.domain.usuario;
 
+import com.jorge.forumHub.domain.resposta.Resposta;
+import com.jorge.forumHub.domain.topico.Topico;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,6 +14,7 @@ import java.util.List;
 @Table(name= "usuarios")
 @Entity(name = "Usuario")
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(of ="id")
@@ -20,10 +23,19 @@ public class Usuario implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String nome;
+    @Column(name = "email")
     private String login;
     private String senha;
     @Enumerated(EnumType.STRING)
     private UsuarioRole role;
+    private Boolean ativo;
+
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Topico> topicos;
+
+    @OneToMany(mappedBy = "autor", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Resposta> respostas;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

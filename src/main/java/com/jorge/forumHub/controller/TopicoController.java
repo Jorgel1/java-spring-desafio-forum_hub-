@@ -1,9 +1,7 @@
 package com.jorge.forumHub.controller;
 
-import com.jorge.forumHub.domain.topico.DadosListagemTopico;
-import com.jorge.forumHub.domain.topico.Topico;
-import com.jorge.forumHub.domain.topico.TopicoRepository;
 import com.jorge.forumHub.domain.topico.*;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -17,27 +15,31 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
 @RequestMapping("/topicos")
+@SecurityRequirement(name = "bearer-key")
 public class TopicoController {
 
     @Autowired
     private TopicoRepository repository;
 
+    @Autowired
+    TopicoService topicoService;
+
     @PostMapping
     @Transactional
-    public ResponseEntity CadastrarTopico(@RequestBody @Valid DadosCadastroTopico dadosCadastroTopico, UriComponentsBuilder uriBuilder){
-       var topico = new Topico(dadosCadastroTopico);
-        repository.save(topico);
-
-        var uri = uriBuilder.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();
-
-        return ResponseEntity.created(uri).body(new DadosDetalhamentoTopico(topico));
+    public ResponseEntity cadastrar(@RequestBody @Valid DadosCadastroTopico dadosCadastroTopico, UriComponentsBuilder uriBuilder){
+       var dadosDetalhamentoTopico = topicoService.cadastrar(dadosCadastroTopico);
+        var uri = uriBuilder.path("/topicos/{id}")
+                .buildAndExpand(dadosDetalhamentoTopico.id()).toUri();
+        return ResponseEntity.created(uri).body(dadosDetalhamentoTopico);
     }
+
+
 
 //    Que tal exibir os 10 primeiros resultados ordenados pela data de criação do tópico em ordem ASC?
 //    http://localhost:8080/topicos?size=10&sort=dataCriacao
     @GetMapping
     public ResponseEntity<Page<DadosListagemTopico>> listar(@PageableDefault(size=10, sort = {"dataCriacao"}) Pageable paginacao){
-        var page = repository.findAllByStatusTrue(paginacao).map(DadosListagemTopico::new);
+        var page = repository.findAll(paginacao).map(DadosListagemTopico::new);
         return ResponseEntity.ok(page);
     }
 
@@ -63,7 +65,7 @@ public class TopicoController {
     @Transactional
     public ResponseEntity excluir(@PathVariable Long id){
         var topico = repository.getReferenceById(id);
-        topico.excluir();
+        topico.finalizarTopico();
         return ResponseEntity.noContent().build();
     }
 
